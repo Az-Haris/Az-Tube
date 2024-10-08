@@ -123,7 +123,7 @@ function displayVideos(videos) {
         videoContainer.classList.remove("grid")
         videoContainer.innerHTML = `
             <div class="min-h-96 flex flex-col gap-5 justify-center items-center">
-                <img src="Az-Tube/assets/Icon.png" />
+                <img src="../Az-Tube/assets/Icon.png" />
                 <h2 class="text-2xl font-bold w-72 text-center">Oops!! Sorry, There is no content here</h2>
             </div>
         `
