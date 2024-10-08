@@ -4,6 +4,7 @@ const loadCategories = () => {
     fetch("https://openapi.programming-hero.com/api/phero-tube/categories")
         .then(res => res.json())
         .then(data => displayCategories(data.categories))
+        .catch(err => console.log(err))
 }
 
 function displayCategories(categories) {
@@ -23,6 +24,32 @@ function removeActiveButton(){
     for(btn of buttons){
         btn.classList.remove("btn-primary");
     }
+}
+
+
+// Load video Details
+
+const loadVideoDetails = async(videoId) => {
+    console.log(videoId);
+    const uri = `https://openapi.programming-hero.com/api/phero-tube/video/${videoId}`
+    const res = await fetch(uri);
+    const details = await res.json();
+    displayDetails(details.video);
+
+}
+
+// Display video details
+
+const displayDetails = (video) =>{
+    console.log(video)
+    const modalDetailsContainer = document.getElementById("video-details-container");
+
+    modalDetailsContainer.innerHTML = `
+        <img src=${video.thumbnail} />
+        <p>${video.description}</p>
+    `
+
+    document.getElementById("videoModal").showModal()
 }
 
 
@@ -76,6 +103,7 @@ function displayVideos(videos) {
                         
                     </div>
                     <p>${video.others.views} views</p>
+                    <button class="btn btn-sm btn-warning" onclick="loadVideoDetails('${video.video_id}')">Details</button>
                 </div>
 
             </div>
