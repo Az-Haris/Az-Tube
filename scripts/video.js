@@ -1,3 +1,8 @@
+
+let videosList = []; // Global variable to store videos
+
+
+
 // Load All Categories
 
 const loadCategories = () => {
@@ -54,16 +59,61 @@ const displayDetails = (video) =>{
 
 
 
+
 // Load All videos
 
 const loadVideos = (searchText = "") => {
     fetch(`https://openapi.programming-hero.com/api/phero-tube/videos?title=${searchText}`)
         .then(res => res.json())
-        .then(videos => displayVideos(videos.videos))
+        .then(videos => {
+            displayVideos(videos.videos);
+            videosList = videos.videos;
+        })
+
+        // .sort(function(a, b){
+        //     if(a.others.views < b.others.views){
+        //         return -1;
+        //     } else if(a.others.views > b.others.views){
+        //         return 1;
+        //     } else{
+        //         return 0;
+        //     }
+        // })
+
         .catch(err => console.log(err))
     
     console.log(searchText)
 }
+
+
+
+// Sort videos function
+const sortVideos = (order = 'asc') => {
+    if (order === 'asc') {
+        videosList.sort((a, b) => parseFloat(a.others.views) - parseFloat(b.others.views));
+    } else {
+        videosList.sort((a, b) => parseFloat(b.others.views) - parseFloat(a.others.views));
+    }
+    displayVideos(videosList); // Redisplay videos after sorting
+}
+
+// Attach event listener to sort button
+document.getElementById("sort-button").addEventListener("click", () => {
+    const sortOrder = document.getElementById("sort-button").getAttribute("data-order");
+    if (sortOrder === "asc") {
+        sortVideos("desc");
+        document.getElementById("sort-button").setAttribute("data-order", "desc");
+    } else {
+        sortVideos("asc");
+        document.getElementById("sort-button").setAttribute("data-order", "asc");
+    }
+});
+
+
+
+
+
+// Display Video Function
 
 function displayVideos(videos) {
     const videoContainer = document.getElementById("video-container");
@@ -126,6 +176,7 @@ function loadCategoryVideo(categoryId){
         removeActiveButton();
         activeBtn.classList.add("btn-primary")
         displayVideos(videos.category)
+        videosList = videos.category;
     })
     .catch(err => console.log(err))
 }
